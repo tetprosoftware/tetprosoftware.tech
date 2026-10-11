@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tết Pro Software Tech — Engineering better software</title>
+<meta name="description" content="Phương pháp làm việc kỹ thuật, kiến trúc giải pháp và tài liệu hướng dẫn của Tết Pro Software: phần mềm dễ bảo trì, tích hợp và mở rộng.">
+<link rel="canonical" href="https://www.tetprosoftware.tech/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Tết Pro Software Tech">
+<meta property="og:description" content="Engineering better software, one reliable system at a time.">
+<meta property="og:url" content="https://www.tetprosoftware.tech/">
+<meta name="theme-color" content="#0891B2">
+<style>
+:root{
+  --bg:#F8FAFC;--surface:#fff;--cyan:#CFFAFE;--teal:#0891B2;--teal-d:#0E7490;--mint:#D1FAE5;--mint-d:#047857;
+  --ink:#0F172A;--muted:#475569;--line:#D5E3EA;--code-bg:#0F1E2B;--code-ink:#DCEBF2;
+  --k:#7DD3FC;--s:#86EFAC;--c:#7C93A3;--n:#FCD34D;
+  --sans:"Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Code",Consolas,Menlo,monospace;
+}
+:root[data-theme="dark"]{
+  --bg:#0B151D;--surface:#112230;--cyan:#0E3A47;--teal:#22C3E0;--teal-d:#67E0F2;--mint:#123A2C;--mint-d:#6EE7B7;
+  --ink:#E6F1F6;--muted:#9DB3C0;--line:#1F3A4B;--code-bg:#08111A;--code-ink:#D5E6EF;
+}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0B151D;--surface:#112230;--cyan:#0E3A47;--teal:#22C3E0;--teal-d:#67E0F2;--mint:#123A2C;--mint-d:#6EE7B7;
+  --ink:#E6F1F6;--muted:#9DB3C0;--line:#1F3A4B;--code-bg:#08111A;--code-ink:#D5E6EF;}}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 var(--sans);-webkit-font-smoothing:antialiased}
+a{color:var(--teal-d)}
+:focus-visible{outline:3px solid var(--teal);outline-offset:2px;border-radius:4px}
+.skip{position:absolute;left:-999px;top:8px;background:var(--teal);color:#fff;padding:8px 14px;z-index:99}
+.skip:focus{left:8px}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+header.top{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;gap:16px;height:60px}
+.brand{font-weight:700;text-decoration:none;color:var(--ink);display:flex;align-items:center;gap:8px;margin-right:auto}
+.brand b{color:var(--teal)}
+nav.main{display:flex;gap:4px;flex-wrap:wrap}
+nav.main a{color:var(--muted);text-decoration:none;font-size:14px;padding:6px 10px;border-radius:6px}
+nav.main a:hover{background:var(--cyan);color:var(--ink)}
+button{font:inherit;cursor:pointer}
+.icon-btn{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;padding:6px 12px;font-size:14px}
+.icon-btn:hover{border-color:var(--teal)}
+@media(max-width:820px){nav.main{display:none}}
+section{padding:72px 0;border-bottom:1px solid var(--line)}
+h1,h2,h3{line-height:1.2;margin:0 0 .5em;letter-spacing:-.01em}
+h2{font-size:clamp(1.6rem,3vw,2.1rem)}
+h3{font-size:1.1rem}
+.lead{color:var(--muted);max-width:68ch}
+.note{font-size:14px;color:var(--muted);border-left:3px solid var(--teal);padding:6px 12px;background:var(--cyan);border-radius:0 6px 6px 0;max-width:72ch}
+/* hero */
+.hero{padding:72px 0 64px;background:
+  linear-gradient(var(--line) 1px,transparent 1px) 0 0/48px 48px,
+  linear-gradient(90deg,var(--line) 1px,transparent 1px) 0 0/48px 48px;background-color:var(--bg)}
+.hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center}
+.hero h1{font-size:clamp(2.2rem,5.4vw,3.8rem);font-weight:750;max-width:14ch}
+.hero .lead{font-size:1.1rem}
+.cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}
+.btn{display:inline-block;padding:11px 20px;border-radius:8px;font-weight:600;text-decoration:none;border:1px solid var(--teal)}
+.btn.p{background:var(--teal);color:#fff}
+:root[data-theme="dark"] .btn.p{color:#04222B}
+.btn.s{color:var(--teal-d);background:var(--surface)}
+.btn:hover{filter:brightness(1.08)}
+@media(max-width:860px){.hero-grid{grid-template-columns:1fr}}
+/* code */
+.code{background:var(--code-bg);color:var(--code-ink);border-radius:10px;border:1px solid var(--line);overflow:hidden}
+.code-h{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;font:13px var(--mono);color:#9FB8C6;border-bottom:1px solid #1d3345}
+.copy{background:#16384a;color:#DCEBF2;border:1px solid #2a5870;border-radius:6px;padding:3px 10px;font-size:12px}
+.copy:hover{background:#1c4a61}
+pre{margin:0;padding:14px 16px;overflow-x:auto;font:13.5px/1.6 var(--mono)}
+pre:focus-visible{outline-offset:-3px}
+.k{color:var(--k)}.s{color:var(--s)}.c{color:var(--c);font-style:italic}.n{color:var(--n)}
+/* grids */
+.grid{display:grid;gap:16px;margin-top:28px}
+.g3{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.g2{grid-template-columns:repeat(auto-fit,minmax(340px,1fr))}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px}
+.card p{margin:0;color:var(--muted);font-size:15px}
+.card.principle{border-top:3px solid var(--teal)}
+.tag{display:inline-block;font-size:12px;background:var(--mint);color:var(--mint-d);padding:2px 8px;border-radius:99px;margin-bottom:10px}
+/* arch */
+.arch{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;margin-top:24px;overflow-x:auto}
+.arch svg{min-width:640px;width:100%;height:auto;display:block}
+.arch .box{fill:var(--surface);stroke:var(--teal);stroke-width:1.5}
+.arch .box.alt{fill:var(--cyan)}
+.arch .box.mon{fill:var(--mint);stroke:var(--mint-d);stroke-dasharray:5 4}
+.arch text{fill:var(--ink);font:600 14px var(--sans)}
+.arch .sub{font:12px var(--sans);fill:var(--muted);font-weight:400}
+.arch .ln{stroke:var(--teal);stroke-width:1.5;fill:none}
+/* workflow */
+.flow{list-style:none;padding:0;margin:28px 0 0;display:flex;flex-wrap:wrap;gap:8px}
+.flow li{flex:1 1 120px;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px 14px;position:relative}
+.flow li:not(:last-child)::after{content:"";position:absolute;right:-9px;top:50%;width:10px;height:2px;background:var(--teal)}
+.flow strong{display:block;color:var(--teal-d)}
+.flow span{font-size:13px;color:var(--muted)}
+@media(max-width:700px){.flow li::after{display:none}}
+/* docs */
+details.card summary{cursor:pointer;font-weight:600;list-style:none}
+details.card summary::-webkit-details-marker{display:none}
+details.card summary::after{content:"+";float:right;color:var(--teal)}
+details.card[open] summary::after{content:"–"}
+details.card ul{margin:12px 0 0;padding-left:18px;color:var(--muted);font-size:15px}
+/* eco */
+.eco{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-top:28px}
+.eco a{display:block;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px;text-decoration:none;color:var(--ink)}
+.eco a:hover{border-color:var(--teal)}
+.eco b{display:block;font-size:1.15rem;color:var(--teal-d)}
+.eco small{color:var(--muted);word-break:break-all}
+.eco a[aria-current="page"]{background:var(--cyan);border-color:var(--teal)}
+.eco em{font-style:normal;font-size:12px;background:var(--teal);color:#fff;padding:1px 8px;border-radius:99px;margin-left:6px}
+:root[data-theme="dark"] .eco em{color:#04222B}
+.social{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.social a{border:1px solid var(--line);background:var(--surface);border-radius:99px;padding:6px 14px;font-size:14px;text-decoration:none}
+.social a:hover{border-color:var(--teal)}
+footer{padding:36px 0;color:var(--muted);font-size:14px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Bỏ qua điều hướng</a>
+<header class="top"><div class="wrap bar">
+  <a class="brand" href="#top" aria-label="Tết Pro Software Tech"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><rect x="1" y="1" width="20" height="20" rx="5" fill="none" stroke="#0891B2" stroke-width="2"/><path d="M6 8h10M11 8v8" stroke="#0891B2" stroke-width="2" stroke-linecap="round"/></svg>Tết Pro <b>Tech</b></a>
+  <nav class="main" aria-label="Điều hướng chính">
+    <a href="#principles">Nguyên tắc</a><a href="#domains">Công nghệ</a><a href="#architecture">Kiến trúc</a><a href="#workflow">Quy trình</a><a href="#code">Code</a><a href="#docs">Tài liệu</a><a href="#ecosystem">Hệ sinh thái</a><a href="#contact">Liên hệ</a>
+  </nav>
+  <button class="icon-btn" id="theme" type="button" aria-pressed="false">Chế độ tối</button>
+</div></header>
+
+<main id="main">
+<section class="hero" id="top"><div class="wrap hero-grid">
+  <div>
+    <h1>Engineering better software, one reliable system at a time.</h1>
+    <p class="lead">Tết Pro Software — giải pháp chuyển đổi số toàn diện. Trang này trình bày cách chúng tôi hướng tới phần mềm dễ bảo trì, dễ tích hợp và có khả năng mở rộng: từ nguyên tắc kỹ thuật, kiến trúc khái niệm đến tài liệu và ví dụ code.</p>
+    <div class="cta"><a class="btn p" href="#architecture">Xem kiến trúc</a><a class="btn s" href="https://github.com/tetprosoftware" target="_blank" rel="noopener noreferrer">GitHub</a></div>
+  </div>
+  <div class="code" role="region" aria-label="Ví dụ code hero">
+    <div class="code-h"><span>health.js</span><button class="copy" type="button" data-copy="hero">Copy</button></div>
+<pre tabindex="0" id="hero"><code><span class="c">// Một endpoint kiểm tra sức khỏe: nhỏ, rõ, dễ quan sát</span>
+<span class="k">export function</span> health(<span class="n">deps</span>) {
+  <span class="k">return</span> {
+    status: deps.db.isReady() ? <span class="s">"ok"</span> : <span class="s">"degraded"</span>,
+    time: <span class="k">new</span> Date().toISOString(),
+  };
+}</code></pre>
+  </div>
+</div></section>
+
+<section id="principles"><div class="wrap">
+  <h2>Engineering principles</h2>
+  <p class="lead">Đây là các nguyên tắc định hướng cách chúng tôi thiết kế và xây dựng phần mềm. Chúng không phải là tuyên bố về chứng nhận hay tiêu chuẩn đã đạt được.</p>
+  <div class="grid g3">
+    <div class="card principle"><h3>Maintainability</h3><p>Mã nguồn rõ ràng, module hóa, dễ đọc và dễ thay đổi theo thời gian.</p></div>
+    <div class="card principle"><h3>Security by design</h3><p>Cân nhắc bảo mật từ khâu thiết kế: quyền tối thiểu, kiểm tra dữ liệu đầu vào, quản lý bí mật đúng cách.</p></div>
+    <div class="card principle"><h3>Accessibility</h3><p>Giao diện dùng được với bàn phím, trình đọc màn hình và nhiều điều kiện sử dụng.</p></div>
+    <div class="card principle"><h3>Testing and quality</h3><p>Kiểm thử ở nhiều tầng để thay đổi được thực hiện với độ tin cậy cao hơn.</p></div>
+    <div class="card principle"><h3>Documentation</h3><p>Tài liệu đi cùng mã nguồn: cách chạy, cách đóng góp, các quyết định thiết kế.</p></div>
+    <div class="card principle"><h3>Performance and observability</h3><p>Đo lường trước khi tối ưu; log, metric và trace giúp hiểu hệ thống đang làm gì.</p></div>
+  </div>
+</div></section>
+
+<section id="domains"><div class="wrap">
+  <h2>Technology domains</h2>
+  <p class="lead">Các lĩnh vực kỹ thuật mà chúng tôi quan tâm và làm việc cùng khách hàng khi phù hợp với yêu cầu. Danh sách không khẳng định một ngăn xếp hạ tầng cụ thể.</p>
+  <div class="grid g3">
+    <div class="card"><h3>Frontend và backend</h3><p>Ứng dụng web và dịch vụ phía máy chủ.</p></div>
+    <div class="card"><h3>API integration</h3><p>Thiết kế và tích hợp API, hợp đồng dữ liệu rõ ràng.</p></div>
+    <div class="card"><h3>Open-source technologies</h3><p>Ưu tiên công nghệ mở khi phù hợp bài toán.</p></div>
+    <div class="card"><h3>Cloud computing</h3><p>Triển khai và vận hành trên hạ tầng đám mây theo nhu cầu.</p></div>
+    <div class="card"><h3>DevOps và CI/CD</h3><p>Tự động hóa build, kiểm thử và phát hành.</p></div>
+    <div class="card"><h3>Database design</h3><p>Mô hình dữ liệu, chỉ mục và di chuyển lược đồ an toàn.</p></div>
+    <div class="card"><h3>AI và machine learning</h3><p>Ứng dụng mô hình vào quy trình nghiệp vụ có đánh giá rõ ràng.</p></div>
+    <div class="card"><h3>IoT và blockchain</h3><p>Chỉ khi bài toán thực sự cần đến.</p></div>
+  </div>
+</div></section>
+
+<section id="architecture"><div class="wrap">
+  <h2>Architecture</h2>
+  <p class="lead">Mô hình khái niệm về cách các thành phần của một hệ thống phần mềm thường kết nối với nhau.</p>
+  <div class="arch">
+  <svg viewBox="0 0 760 330" role="img" aria-labelledby="at ad">
+    <title id="at">Illustrative architecture</title>
+    <desc id="ad">Ứng dụng gọi API, API đọc ghi database; tất cả chạy trên infrastructure và được giám sát bởi monitoring.</desc>
+    <rect class="box mon" x="20" y="20" width="720" height="290" rx="14"/>
+    <text x="38" y="46">Infrastructure</text><text class="sub" x="38" y="64">Môi trường chạy khái niệm</text>
+    <rect class="box alt" x="50" y="105" width="180" height="80" rx="10"/><text x="140" y="140" text-anchor="middle">Application</text><text class="sub" x="140" y="162" text-anchor="middle">Web / mobile client</text>
+    <rect class="box" x="290" y="105" width="180" height="80" rx="10"/><text x="380" y="140" text-anchor="middle">API</text><text class="sub" x="380" y="162" text-anchor="middle">Business logic</text>
+    <rect class="box alt" x="530" y="105" width="180" height="80" rx="10"/><text x="620" y="140" text-anchor="middle">Database</text><text class="sub" x="620" y="162" text-anchor="middle">Persistent data</text>
+    <path class="ln" d="M230 145h56M470 145h56M280 140l8 5-8 5M520 140l8 5-8 5"/>
+    <rect class="box" x="230" y="235" width="300" height="52" rx="10"/><text x="380" y="259" text-anchor="middle">Monitoring</text><text class="sub" x="380" y="277" text-anchor="middle">Logs · metrics · traces</text>
+    <path class="ln" stroke-dasharray="4 4" d="M380 185v50M140 185v76h90M620 185v76h-90"/>
+  </svg>
+  </div>
+  <p class="note" style="margin-top:14px"><strong>Illustrative architecture</strong> — sơ đồ khái niệm, không phải sơ đồ của một sản phẩm hay hạ tầng thực tế.</p>
+</div></section>
+
+<section id="workflow"><div class="wrap">
+  <h2>Workflow</h2>
+  <p class="lead">Một vòng lặp liên tục, trong đó kết quả quan sát được đưa trở lại bước lập kế hoạch.</p>
+  <ol class="flow">
+    <li><strong>Plan</strong><span>Làm rõ mục tiêu và ràng buộc</span></li>
+    <li><strong>Design</strong><span>Chọn kiến trúc, mô hình dữ liệu</span></li>
+    <li><strong>Build</strong><span>Viết mã theo từng bước nhỏ</span></li>
+    <li><strong>Test</strong><span>Kiểm thử tự động và thủ công</span></li>
+    <li><strong>Deploy</strong><span>Phát hành có kiểm soát</span></li>
+    <li><strong>Observe</strong><span>Theo dõi hành vi thực tế</span></li>
+    <li><strong>Improve</strong><span>Cải thiện dựa trên dữ liệu</span></li>
+  </ol>
+</div></section>
+
+<section id="code"><div class="wrap">
+  <h2>Code examples</h2>
+  <p class="lead">Các đoạn mã ngắn, minh họa tư duy kỹ thuật. Không chứa khóa API hay bí mật; hãy lấy cấu hình từ biến môi trường.</p>
+  <div class="grid g2">
+    <div class="code" role="region" aria-label="Ví dụ kiểm tra dữ liệu đầu vào">
+      <div class="code-h"><span>validate.js</span><button class="copy" type="button" data-copy="c1">Copy</button></div>
+<pre tabindex="0" id="c1"><code><span class="c">// Kiểm tra dữ liệu đầu vào trước khi xử lý</span>
+<span class="k">export function</span> parseEmail(<span class="n">input</span>) {
+  <span class="k">const</span> value = String(input ?? <span class="s">""</span>).trim();
+  <span class="k">if</span> (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+    <span class="k">throw new</span> Error(<span class="s">"Email không hợp lệ"</span>);
+  }
+  <span class="k">return</span> value.toLowerCase();
+}</code></pre>
+    </div>
+    <div class="code" role="region" aria-label="Ví dụ gọi API an toàn">
+      <div class="code-h"><span>client.js</span><button class="copy" type="button" data-copy="c2">Copy</button></div>
+<pre tabindex="0" id="c2"><code><span class="c">// Gọi API với timeout và xử lý lỗi rõ ràng</span>
+<span class="k">export async function</span> getJson(<span class="n">url</span>, ms = <span class="n">5000</span>) {
+  <span class="k">const</span> ctrl = <span class="k">new</span> AbortController();
+  <span class="k">const</span> t = setTimeout(() => ctrl.abort(), ms);
+  <span class="k">try</span> {
+    <span class="k">const</span> res = <span class="k">await</span> fetch(url, { signal: ctrl.signal });
+    <span class="k">if</span> (!res.ok) <span class="k">throw new</span> Error(<span class="s">`HTTP ${res.status}`</span>);
+    <span class="k">return await</span> res.json();
+  } <span class="k">finally</span> { clearTimeout(t); }
+}</code></pre>
+    </div>
+    <div class="code" role="region" aria-label="Ví dụ kiểm thử">
+      <div class="code-h"><span>validate.test.js</span><button class="copy" type="button" data-copy="c3">Copy</button></div>
+<pre tabindex="0" id="c3"><code><span class="k">import</span> { test } <span class="k">from</span> <span class="s">"node:test"</span>;
+<span class="k">import</span> assert <span class="k">from</span> <span class="s">"node:assert/strict"</span>;
+<span class="k">import</span> { parseEmail } <span class="k">from</span> <span class="s">"./validate.js"</span>;
+
+test(<span class="s">"chuẩn hóa email"</span>, () => {
+  assert.equal(parseEmail(<span class="s">" A@Example.com "</span>), <span class="s">"a@example.com"</span>);
+});</code></pre>
+    </div>
+    <div class="code" role="region" aria-label="Ví dụ cấu hình bằng biến môi trường">
+      <div class="code-h"><span>config.js</span><button class="copy" type="button" data-copy="c4">Copy</button></div>
+<pre tabindex="0" id="c4"><code><span class="c">// Bí mật nằm ở môi trường, không nằm trong mã nguồn</span>
+<span class="k">export const</span> config = {
+  port: Number(process.env.PORT ?? <span class="n">3000</span>),
+  dbUrl: process.env.DATABASE_URL,
+};
+<span class="k">if</span> (!config.dbUrl) <span class="k">throw new</span> Error(<span class="s">"Thiếu DATABASE_URL"</span>);</code></pre>
+    </div>
+  </div>
+</div></section>
+
+<section id="docs"><div class="wrap">
+  <h2>Documentation</h2>
+  <p class="note">Nội dung dưới đây là tài liệu minh họa, hiển thị trực tiếp trong trang. Chưa có trang tài liệu riêng.</p>
+  <div class="grid g3">
+    <details class="card"><summary>Getting started</summary><ul><li>Cài đặt phiên bản runtime được khuyến nghị.</li><li>Sao chép cấu hình mẫu và điền biến môi trường.</li><li>Chạy kiểm thử trước khi thay đổi mã.</li></ul></details>
+    <details class="card"><summary>Coding principles</summary><ul><li>Hàm nhỏ, một trách nhiệm.</li><li>Đặt tên theo ý nghĩa nghiệp vụ.</li><li>Ưu tiên mã dễ đọc hơn mã “khéo”.</li></ul></details>
+    <details class="card"><summary>Deployment concepts</summary><ul><li>Tách cấu hình khỏi mã nguồn.</li><li>Phát hành theo bước nhỏ, có thể hoàn tác.</li><li>Kiểm tra sức khỏe sau mỗi lần triển khai.</li></ul></details>
+    <details class="card"><summary>API integration</summary><ul><li>Định nghĩa rõ hợp đồng dữ liệu và mã lỗi.</li><li>Đặt timeout và thử lại có giới hạn.</li><li>Ghi log mã yêu cầu để truy vết.</li></ul></details>
+    <details class="card"><summary>Security checklist</summary><ul><li>Kiểm tra và làm sạch dữ liệu đầu vào.</li><li>Dùng quyền tối thiểu cho mọi tài khoản dịch vụ.</li><li>Không đưa bí mật vào kho mã nguồn.</li><li>Cập nhật phụ thuộc thường xuyên.</li></ul></details>
+  </div>
+</div></section>
+
+<section id="opensource"><div class="wrap">
+  <h2>Open source</h2>
+  <p class="lead">Theo dõi các dự án và mã nguồn mở của Tết Pro Software trên GitHub Organization.</p>
+  <div class="cta"><a class="btn p" href="https://github.com/tetprosoftware" target="_blank" rel="noopener noreferrer">github.com/tetprosoftware</a></div>
+</div></section>
+
+<section id="ecosystem"><div class="wrap">
+  <h2>Hệ sinh thái 10 website</h2>
+  <p class="lead">Các tên miền thuộc hệ sinh thái Tết Pro Software.</p>
+  <div class="eco" id="eco"></div>
+  <div class="social" aria-label="Mạng xã hội" id="social"></div>
+</div></section>
+
+<section id="contact" style="border-bottom:0"><div class="wrap">
+  <h2>Trao đổi về kiến trúc và yêu cầu kỹ thuật</h2>
+  <p class="lead">Gửi mô tả ngắn về bài toán, ràng buộc và mục tiêu của bạn. Chúng tôi sẽ phản hồi qua email.</p>
+  <div class="cta"><a class="btn p" href="mailto:lien-he@tetprosoftware.com?subject=Trao%20%C4%91%E1%BB%95i%20k%E1%BB%B9%20thu%E1%BA%ADt">lien-he@tetprosoftware.com</a><a class="btn s" href="https://www.tetprosoftware.com/" target="_blank" rel="noopener noreferrer">Website doanh nghiệp</a></div>
+</div></section>
+</main>
+
+<footer><div class="wrap">© <span id="y"></span> Tết Pro Software — Giải pháp chuyển đổi số toàn diện.</div></footer>
+
+<script>
+(function(){
+  /* Theme */
+  var root=document.documentElement,btn=document.getElementById('theme'),mq=window.matchMedia('(prefers-color-scheme: dark)');
+  function isDark(){var t=root.getAttribute('data-theme');return t?t==='dark':mq.matches}
+  function sync(){var d=isDark();btn.textContent=d?'Chế độ sáng':'Chế độ tối';btn.setAttribute('aria-pressed',d)}
+  try{var s=localStorage.getItem('tps-theme');if(s)root.setAttribute('data-theme',s)}catch(e){}
+  btn.addEventListener('click',function(){var n=isDark()?'light':'dark';root.setAttribute('data-theme',n);try{localStorage.setItem('tps-theme',n)}catch(e){}sync()});
+  sync();
+
+  /* Ecosystem */
+  var ext=['com','net','org','online','me','store','tech','app','xyz','site'],eco=document.getElementById('eco');
+  ext.forEach(function(x){
+    var u='https://www.tetprosoftware.'+x+'/',a=document.createElement('a');
+    a.href=u;
+    var cur=x==='tech';
+    if(cur){a.setAttribute('aria-current','page')}else{a.target='_blank';a.rel='noopener noreferrer'}
+    a.innerHTML='<b>.'+x+(cur?'<em>Trang hiện tại</em>':'')+'</b><small>'+u.replace('https://','')+'</small>';
+    eco.appendChild(a);
+  });
+
+  /* Social */
+  var soc=[['Facebook','https://www.facebook.com/tetprosoftware'],['Instagram','https://www.instagram.com/tetprosoftware'],['Threads','https://www.threads.com/@tetprosoftware'],['TikTok','https://www.tiktok.com/@tetprosoftware'],['YouTube','https://www.youtube.com/@tetprosoftware'],['GitHub','https://github.com/tetprosoftware'],['Pinterest','https://www.pinterest.com/tetprosoftware'],['LinkedIn','https://www.linkedin.com/company/tetprosoftware']],sw=document.getElementById('social');
+  soc.forEach(function(p){var a=document.createElement('a');a.href=p[1];a.target='_blank';a.rel='noopener noreferrer';a.textContent=p[0];sw.appendChild(a)});
+
+  /* Copy */
+  function fallback(t){var ta=document.createElement('textarea');ta.value=t;ta.setAttribute('readonly','');ta.style.cssText='position:fixed;opacity:0';document.body.appendChild(ta);ta.select();var ok=false;try{ok=document.execCommand('copy')}catch(e){}document.body.removeChild(ta);return ok}
+  document.querySelectorAll('.copy').forEach(function(b){
+    b.addEventListener('click',function(){
+      var text=document.getElementById(b.getAttribute('data-copy')).innerText;
+      function done(ok){b.textContent=ok?'Đã chép':'Không chép được';setTimeout(function(){b.textContent='Copy'},1800)}
+      if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(text).then(function(){done(true)},function(){done(fallback(text))})}
+      else done(fallback(text));
+    });
+  });
+  document.getElementById('y').textContent=new Date().getFullYear();
+})();
+</script>
+</body>
+</html>
